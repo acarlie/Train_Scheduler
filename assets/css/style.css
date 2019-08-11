@@ -1,0 +1,42 @@
+:root{
+  --color-primary:  #1e88e5;
+}
+
+.timepicker-digital-display{ background-color: var(--color-primary); }
+.timepicker__day--selected, .timepicker__day--selected:hover, .timepicker--focused .timepicker__day--selected { background-color: var(--color-primary);}
+.timepicker__close { color: var(--color-primary) !important;}
+.timepicker__today { color: var(--color-primary) !important;}
+.timepicker-tick:hover { background: RGBA(30,136,229,.25) !important; }
+.timepicker-canvas line { stroke: var(--color-primary) !important; }
+.timepicker-canvas-bearing { fill: var(--color-primary) !important; }
+.timepicker-canvas-bg { fill: var(--color-primary) !important; }
+
+
+  /* label color */
+  #input-form .input-field label {
+    color: #000;
+  }
+  /* label focus color */
+  #input-form .input-field input[type=text]:focus + label {
+    color: #1e88e5 ;
+  }
+  /* label underline focus color */
+  #input-form .input-field input[type=text]:focus {
+    border-bottom: 1px solid #1e88e5;
+    box-shadow: 0 1px 0 0 #1e88e5;
+  }
+  /* valid color */
+  #input-form .input-field input[type=text].valid {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+  }
+  /* invalid color */
+  #input-form .input-field input[type=text].invalid {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+  }
+  /* icon prefix focus color */
+  #input-form .input-field .prefix.active {
+    color: #1e88e5 ;
+  }
+

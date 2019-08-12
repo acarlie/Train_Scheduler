@@ -1,42 +1,80 @@
 :root{
-  --color-primary:  #1e88e5;
+  --color-primary:#1e88e5;
+  --color-primary-trans: RGBA(30,136,229,.25);
+  --color-success: #0a5;
+  --color-danger: #E00000;
 }
 
+/*-------------------Timepicker Overrides-------------------*/
 .timepicker-digital-display{ background-color: var(--color-primary); }
 .timepicker__day--selected, .timepicker__day--selected:hover, .timepicker--focused .timepicker__day--selected { background-color: var(--color-primary);}
 .timepicker__close { color: var(--color-primary) !important;}
 .timepicker__today { color: var(--color-primary) !important;}
-.timepicker-tick:hover { background: RGBA(30,136,229,.25) !important; }
+.timepicker-tick:hover { background: var(--color-primary-trans) !important; }
 .timepicker-canvas line { stroke: var(--color-primary) !important; }
 .timepicker-canvas-bearing { fill: var(--color-primary) !important; }
 .timepicker-canvas-bg { fill: var(--color-primary) !important; }
+.timepicker-footer button { color: var(--color-primary); }
 
+/*-------------------Input Overrides-------------------*/
+.collection-item.collection-reset{
+  padding: 0 2em;
+  margin: 0;
+}
 
-  /* label color */
-  #input-form .input-field label {
-    color: #000;
-  }
-  /* label focus color */
-  #input-form .input-field input[type=text]:focus + label {
-    color: #1e88e5 ;
-  }
-  /* label underline focus color */
-  #input-form .input-field input[type=text]:focus {
-    border-bottom: 1px solid #1e88e5;
-    box-shadow: 0 1px 0 0 #1e88e5;
-  }
-  /* valid color */
-  #input-form .input-field input[type=text].valid {
-    border-bottom: 1px solid #000;
-    box-shadow: 0 1px 0 0 #000;
-  }
-  /* invalid color */
-  #input-form .input-field input[type=text].invalid {
-    border-bottom: 1px solid #000;
-    box-shadow: 0 1px 0 0 #000;
-  }
-  /* icon prefix focus color */
-  #input-form .input-field .prefix.active {
-    color: #1e88e5 ;
-  }
+#input-form{
+  padding-top: .5em;
+  padding-bottom: 2em;
+}
 
+/* label color */
+#input-form .input-field label { color: #000; }
+
+/* label focus color */
+#input-form .input-field input[type=text]:focus+label,
+#input-form .input-field input[type=number]:focus+label { 
+  color: var(--color-primary); 
+}
+
+/* label underline focus color */
+#input-form .input-field input[type=text]:focus, 
+#input-form .input-field input[type=number]:focus  {
+  border-bottom: 1px solid var(--color-primary);
+  box-shadow: 0 1px 0 0 var(--color-primary);
+}
+
+/* valid color */
+#input-form .input-field input[type=text].valid
+#input-form .input-field input[type=number].valid {
+  border-bottom: 1px solid var(--color-success);
+  box-shadow: 0 1px 0 0 var(--color-success);
+}
+
+/* invalid color */
+#input-form .input-field input[type=text].invalid,
+#input-form .input-field input[type=number].invalid {
+  border-bottom: 1px solid var(--color-danger);
+  box-shadow: 0 1px 0 0 var(--color-danger);
+}
+
+/* icon prefix focus color */
+#input-form .input-field .prefix.active { color: var(--color-primary); }
+
+/*-------------------Button Overrides-------------------*/
+
+#input-form .button{
+  background: var(--color-primary);
+}
+
+/*-------------------Clearfix-------------------*/
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before, 
+.clearfix:after {
+  content: '';
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}

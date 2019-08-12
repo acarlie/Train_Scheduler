@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.js" integrity="sha256-hmnyhUWHslInw6PB8jiyOxG6R49stEh9Fd1DGTFeqUY=" crossorigin="anonymous"></script>
+    
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Document</title>
 </head>
@@ -31,7 +39,7 @@
                                 <th>Minutes Away</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="trains">
 
 
                         </tbody>
@@ -41,23 +49,27 @@
         </ul>
         <ul class="collection with-header">
             <li class="collection-header blue darken-1 white-text"><h5>Add a Train</h5></li>
-            <li class="collection-item">
-                <div id="input-form">
+            <li class="collection-item collection-reset">
+                <form id="input-form" class="clearfix">
                     <div class="input-field">
                         <input id="train_name" type="text" class="validate">
                         <label for="train_name">Train Name</label>
                     </div>
                     <div class="input-field">
-                        <input id="train_destination" type="text" class="validate">
-                        <label for="train_destination">Destination</label>
+                        <input id="train_dest" type="text" class="validate">
+                        <label for="train_dest">Destination</label>
                     </div>
                     <div class="input-field">
-                        <input type="text" id="train_first" class="timepicker">
-                        <label for="train_first">First Train Time</label>
+                        <input type="text" id="train_init" class="timepicker">
+                        <label for="train_init">First Train Time</label>
                     </div>
+                    <div class="input-field">
+                        <input type="number" id="train_freq" class="validate" min="1">
+                        <label for="train_freq">Frequency (min)</label>
+                    </div>
+                    <button id="submit" type="submit" class="waves-effect waves-light btn button right">Add Train</button>
 
-
-                </div>
+                </form>
             </li>
         </ul>
     

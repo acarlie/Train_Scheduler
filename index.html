@@ -14,7 +14,10 @@
     <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-database.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.js" integrity="sha256-hmnyhUWHslInw6PB8jiyOxG6R49stEh9Fd1DGTFeqUY=" crossorigin="anonymous"></script>
-    
+
+    <!-- <link href="https://fonts.googleapis.com/css?family=Comfortaa:600&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,500&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Document</title>
 </head>
@@ -25,9 +28,9 @@
                 <h1 class="center-align">Train Scheduler</h1>
             </div>
         </div>
-        <ul class="collection with-header">
-            <li class="collection-header blue darken-1 white-text"><h5>Train Schedule</h5></li>
-            <li class="collection-item">
+        <ul class="collection with-header collection-train">
+            <li class="collection-header"><h5>Train Schedule</h5></li>
+            <li class="collection-item collection-reset">
                 <div>
                     <table class="highlight responsive-table">
                         <thead>
@@ -47,8 +50,8 @@
                 </div>
             </li>
         </ul>
-        <ul class="collection with-header">
-            <li class="collection-header blue darken-1 white-text"><h5>Add a Train</h5></li>
+        <ul class="collection with-header collection-train">
+            <li class="collection-header"><h5>Add a Train</h5></li>
             <li class="collection-item collection-reset">
                 <form id="input-form" class="clearfix">
                     <div class="input-field">

@@ -5,6 +5,26 @@
   --color-danger: #E00000;
 }
 
+h1, h2, h3, h4, h5, h6, button{
+  /* font-family: 'Comfortaa', cursive; */
+  font-family: 'Montserrat', sans-serif;
+
+}
+
+h1, h2, h3, h4, h5, h6{
+  color: var(--color-primary);
+}
+
+h1, h2{
+  font-weight: 300;
+}
+
+h3, h4, h5, h6, button{
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
 /*-------------------Timepicker Overrides-------------------*/
 .timepicker-digital-display{ background-color: var(--color-primary); }
 .timepicker__day--selected, .timepicker__day--selected:hover, .timepicker--focused .timepicker__day--selected { background-color: var(--color-primary);}
@@ -16,17 +36,24 @@
 .timepicker-canvas-bg { fill: var(--color-primary) !important; }
 .timepicker-footer button { color: var(--color-primary); }
 
-/*-------------------Input Overrides-------------------*/
+
+/*-------------------Collection Overrides-------------------*/
+.collection-train{
+
+}
+
+.collection-header{
+  background: #ccc;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(120deg, #fff, #eee);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(120deg, #fff, #eee); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
 .collection-item.collection-reset{
-  padding: 0 2em;
+  padding: 2em;
   margin: 0;
 }
 
-#input-form{
-  padding-top: .5em;
-  padding-bottom: 2em;
-}
-
+/*-------------------Input Overrides-------------------*/
 /* label color */
 #input-form .input-field label { color: #000; }
 
@@ -64,6 +91,11 @@
 
 #input-form .button{
   background: var(--color-primary);
+}
+
+/*-------------------Table Overrides-------------------*/
+tr:last-child{
+  border-bottom: none;
 }
 
 /*-------------------Clearfix-------------------*/

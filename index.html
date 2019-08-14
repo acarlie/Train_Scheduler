@@ -15,7 +15,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.3/cleave.js" integrity="sha256-hmnyhUWHslInw6PB8jiyOxG6R49stEh9Fd1DGTFeqUY=" crossorigin="anonymous"></script>
 
-    <!-- <link href="https://fonts.googleapis.com/css?family=Comfortaa:600&display=swap" rel="stylesheet"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/style.css">
@@ -40,6 +41,7 @@
                                 <th>Frequency</th>
                                 <th>Next Arrival</th>
                                 <th>Minutes Away</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="trains">
@@ -55,20 +57,20 @@
             <li class="collection-item collection-reset">
                 <form id="input-form" class="clearfix">
                     <div class="input-field">
-                        <input id="train_name" type="text" class="validate">
+                        <input id="train_name" type="text" class="validate" required>
                         <label for="train_name">Train Name</label>
                     </div>
                     <div class="input-field">
-                        <input id="train_dest" type="text" class="validate">
+                        <input id="train_dest" type="text" class="validate" required>
                         <label for="train_dest">Destination</label>
                     </div>
                     <div class="input-field">
-                        <input type="text" id="train_init" class="timepicker">
-                        <label for="train_init">First Train Time</label>
+                        <input type="text" id="train_init" class="timepicker" required>
+                        <label for="train_init">First Train Time (Military Time)</label>
                     </div>
                     <div class="input-field">
-                        <input type="number" id="train_freq" class="validate" min="1">
-                        <label for="train_freq">Frequency (min)</label>
+                        <input type="number" id="train_freq" class="validate" min="1" max="100001" maxlength="6" required>
+                        <label for="train_freq">Frequency (Min)</label>
                     </div>
                     <button id="submit" type="submit" class="waves-effect waves-light btn button right">Add Train</button>
 

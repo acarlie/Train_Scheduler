@@ -18,24 +18,22 @@ var app = {
             twelveHour: false,
         });
 
-        var cleave = new Cleave('#train_init', {
+        new Cleave('#train_init', {
             time: true,
             timePattern: ['h', 'm']
         });
 
-        var minutes = new Cleave('#train_freq', {
-            numericOnly: true,
-            blocks: [6],
-        });
+        this.interval = setInterval(this.timeUpdate, 60000);
     },
     addTrain(){
         event.preventDefault();
-        var name = $('#train_name').val().trim();
-        var dest = $('#train_dest').val().trim();
-        var init = $('#train_init').val();
-        var freq = $('#train_freq').val();
-
-        console.log(name, dest, init, freq);
+        var arr = ['#train_name', '#train_dest', '#train_freq', '#train_init'],
+            vals = app.setVal(arr),
+            name = vals[0],
+            dest = vals[1],
+            freq = vals[2],
+            initialTrain = vals[3],
+            init = moment(initialTrain, "HH:mm").subtract(1, "years").unix();
 
         database.ref().push({
             name,
@@ -43,6 +41,23 @@ var app = {
             init,
             freq,
         });
+
+        app.resetVal(arr);
+        
+    },
+    setVal(arr){
+        var x;
+        var result = [];
+        for (x of arr){
+            result.push( $(x).val().trim() );
+        }
+        return result;
+    },
+    resetVal(arr){
+        var x;
+        for (x of arr){
+            $(x).val('');
+        }
     },
     minutesToHours(mins){
         var h = mins / 60 | 0,
@@ -56,17 +71,52 @@ var app = {
             return h + 'h ' + m + 'm';
         }
     },
+    getValues(init, freq){
+        var first = moment().unix(init),
+            diff = moment().diff(moment(first), "minutes"),
+            remn = diff % freq,
+            away = freq - remn;
+            awayFormatted = app.minutesToHours(away),
+            next = moment().add(away, "minutes").format('hh:mm a');
+
+        return [next, awayFormatted];
+    },
     tableRow(s, key){
-        var tr = $('<tr>').attr('id', key);
-        var frequency = this.minutesToHours(s.freq);
-        var info = [s.name, s.dest, frequency, ' ', ' '];
-        
+        var tr = $('<tr>').addClass('train-info').attr('id', key),
+            button = $('<button>').text('X').attr('data-key', key).addClass('train-delete'),
+            freq = this.minutesToHours(s.freq),
+            values = this.getValues(s.init, s.freq);
+            info = [
+                {info: s.name, id: key + 'name'}, 
+                {info: s.dest, id: key + 'dest'}, 
+                {info: freq, id: key + 'freq'},
+                {info: values[0], id: key + 'next'},
+                {info: values[1], id: key + 'away'},
+                {info: button, id: key + 'close'}
+            ];
+
         var x;
         for (x of info) {
-            tr.append( $('<td>').text(x) );
+            tr.append( $('<td>').html(x.info).attr('id', x.id) );
         }
 
-        tr.prependTo('#trains');
+        tr.attr('data-init', s.init).attr('data-freq', s.freq).prependTo('#trains');
+    },
+    timeUpdate(){
+        $('.train-info').each(function(x, obj){
+            var key = $(this).attr('id'),
+                freq = $(this).attr('data-freq'),
+                init = $(this).attr('data-init'),
+                values = app.getValues(init, freq);
+
+            $('#' + key + 'away').text(values[1]);
+            $('#' + key + 'next').text(values[0]);       
+        });
+    },
+    deleteTrain(){
+        var key = $(this).attr('data-key');
+        database.ref().child(key).remove();
+        $(this).parent().parent().remove();
     }
 }
 
@@ -74,14 +124,17 @@ $(document).ready(function(){
 
     app.init();
 
+    $(document).on('click', '.train-delete', app.deleteTrain);
+
     $('#submit').on('click', app.addTrain);
 
     database.ref().on("child_added", function(snapshot) {
         var key = snapshot.key;
         app.tableRow(snapshot.val(), key);
-    
       }, function(errorObject) {
         console.log("Errors handled: " + errorObject.code);
     });
+
+
 
 });

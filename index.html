@@ -18,6 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Document</title>
@@ -41,7 +42,8 @@
                                 <th>Frequency</th>
                                 <th>Next Arrival</th>
                                 <th>Minutes Away</th>
-                                <th></th>
+                                <th class="table-col-sm"></th>
+                                <th class="table-col-sm"></th>
                             </tr>
                         </thead>
                         <tbody id="trains">
@@ -77,7 +79,34 @@
                 </form>
             </li>
         </ul>
-    
+        <div id="editTrainModal" class="modal">
+            <div class="modal-content">
+                <h5>Edit Train</h5>
+                <form id="edit-form" class="clearfix">
+                    <div class="input-field">
+                        <input id="edit_train_name" type="text" class="validate" required>
+                        <label for="edit_train_name">Train Name</label>
+                    </div>
+                    <div class="input-field">
+                        <input id="edit_train_dest" type="text" class="validate" required>
+                        <label for="edit_train_dest">Destination</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="edit_train_init" class="timepicker" required>
+                        <label for="edit_train_init">First Train Time (Military Time)</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="edit_train_freq" class="validate" min="1" max="100001" maxlength="6" required>
+                        <label for="edit_train_freq">Frequency (Min)</label>
+                    </div>    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-light btn-flat">Cancel</a>
+                <a href="#!" id="editTrainSubmit" class="modal-close waves-effect waves-light btn-flat">Submit</a>
+            </div>
+        </div>
+                      
 
     </main>
     

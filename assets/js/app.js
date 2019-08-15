@@ -33,7 +33,9 @@ var app = {
             dest = vals[1],
             freq = vals[2],
             initialTrain = vals[3],
-            init = moment(initialTrain, "HH:mm").subtract(1, "years").unix();
+            initDate = moment(initialTrain, "HH:mm").subtract(1, "years"),
+            init = moment(initDate).format('X');
+            console.log(init);
 
         database.ref().push({
             name,
@@ -44,6 +46,52 @@ var app = {
 
         app.resetVal(arr);
         
+    },
+    editTrain(){
+        var x = $(this),
+            key = x.attr('data-key'),
+            name = x.attr('data-name'),
+            dest = x.attr('data-dest'),
+            freq = x.attr('data-freq'),
+            init = x.attr('data-init'),
+            initMT = moment(init, 'X').format('HH:mm'),
+            initDate = moment(init, 'X').format('MM/DD/YYYY');
+
+        console.log(key, name, dest, freq, init);
+
+        $('#editTrainSubmit').attr('data-edit-key', key).attr('data-edit-date', initDate);
+
+        $('#edit_train_name').val(name).siblings().addClass('active');
+        $('#edit_train_dest').val(dest).siblings().addClass('active');
+        $('#edit_train_freq').val(freq).siblings().addClass('active');
+        $('#edit_train_init').val(initMT).siblings().addClass('active');
+
+    },
+    editTrainSubmit(){
+        var key = $(this).attr('data-edit-key');
+        var date = $(this).attr('data-edit-date');
+        var arr = ['#edit_train_name', '#edit_train_dest', '#edit_train_freq', '#edit_train_init'],
+            vals = app.setVal(arr),
+            name = vals[0],
+            dest = vals[1],
+            freq = vals[2],
+            initialTrain = vals[3],
+            initTrainString = date + ' ' + initialTrain,
+            initDate = moment(initTrainString, 'MM/DD/YYYY HH:mm'),
+            init = moment(initDate).format('X');
+
+            console.log('Hello');
+        database.ref().child(key).set({
+            name,
+            dest,
+            init,
+            freq,
+        });
+    },
+    deleteTrain(){
+        var key = $(this).attr('data-key');
+        database.ref().child(key).remove();
+        $(this).parent().parent().remove();
     },
     setVal(arr){
         var x;
@@ -72,51 +120,50 @@ var app = {
         }
     },
     getValues(init, freq){
-        var first = moment().unix(init),
-            diff = moment().diff(moment(first), "minutes"),
+
+        var diff = moment().diff(moment(init, 'X'), "minutes"),
             remn = diff % freq,
             away = freq - remn;
             awayFormatted = app.minutesToHours(away),
             next = moment().add(away, "minutes").format('hh:mm a');
 
+            console.log(moment(init, 'X').format('MM/DD/YY'));
         return [next, awayFormatted];
     },
     tableRow(s, key){
         var tr = $('<tr>').addClass('train-info').attr('id', key),
-            button = $('<button>').text('X').attr('data-key', key).addClass('train-delete'),
+            buttonClose = $('<button>').html('<i class="material-icons">close</i>').attr('data-key', key).addClass('btn-flat train-delete'),
+            buttonEdit =  $('<button>').html('<i class="material-icons">edit</i>').attr('data-target', 'editTrainModal').attr('data-key', key).attr('data-name', s.name).attr('data-dest', s.dest).attr('data-freq', s.freq).attr('data-init', s.init).addClass('btn-flat train-edit modal-trigger'),
             freq = this.minutesToHours(s.freq),
             values = this.getValues(s.init, s.freq);
             info = [
-                {info: s.name, id: key + 'name'}, 
-                {info: s.dest, id: key + 'dest'}, 
-                {info: freq, id: key + 'freq'},
-                {info: values[0], id: key + 'next'},
-                {info: values[1], id: key + 'away'},
-                {info: button, id: key + 'close'}
+                {info: s.name, id: key + 'name', class: ''}, 
+                {info: s.dest, id: key + 'dest', class: ''}, 
+                {info: freq, id: key + 'freq', class: ''},
+                {info: values[0], id: key + 'next', class: ''},
+                {info: values[1], id: key + 'away', class: ''},
+                {info: buttonEdit, id: key + 'edit', class: 'table-col-sm'},
+                {info: buttonClose, id: key + 'close', class: 'table-col-sm'}
             ];
 
         var x;
         for (x of info) {
-            tr.append( $('<td>').html(x.info).attr('id', x.id) );
+            tr.append( $('<td>').html(x.info).attr('id', x.id).addClass(x.class) );
         }
 
         tr.attr('data-init', s.init).attr('data-freq', s.freq).prependTo('#trains');
     },
     timeUpdate(){
         $('.train-info').each(function(x, obj){
-            var key = $(this).attr('id'),
-                freq = $(this).attr('data-freq'),
-                init = $(this).attr('data-init'),
+            var x = $(this),
+                key = x.attr('id'),
+                freq = x.attr('data-freq'),
+                init = x.attr('data-init'),
                 values = app.getValues(init, freq);
 
             $('#' + key + 'away').text(values[1]);
             $('#' + key + 'next').text(values[0]);       
         });
-    },
-    deleteTrain(){
-        var key = $(this).attr('data-key');
-        database.ref().child(key).remove();
-        $(this).parent().parent().remove();
     }
 }
 
@@ -124,9 +171,13 @@ $(document).ready(function(){
 
     app.init();
 
-    $(document).on('click', '.train-delete', app.deleteTrain);
-
+    $('.modal').modal();
     $('#submit').on('click', app.addTrain);
+
+    $(document).on('click', '.train-edit', app.editTrain);
+    $('#editTrainSubmit').on('click', app.editTrainSubmit);
+
+    $(document).on('click', '.train-delete', app.deleteTrain);
 
     database.ref().on("child_added", function(snapshot) {
         var key = snapshot.key;
@@ -135,6 +186,19 @@ $(document).ready(function(){
         console.log("Errors handled: " + errorObject.code);
     });
 
+    database.ref().on("value", function(snapshot) {
+        var children = snapshot.numChildren();
+        var snap = snapshot.val();
+        var keys = Object.getOwnPropertyNames(snap);
 
+        
+
+        console.log(snap);
+        console.log(children);
+        console.log(keys);
+        
+        
+    });
+      
 
 });

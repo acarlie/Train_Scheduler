@@ -5,7 +5,7 @@
   --color-danger: #E00000;
 }
 
-h1, h2, h3, h4, h5, h6, button{
+h1, h2, h3, h4, h5, h6, .button{
   /* font-family: 'Comfortaa', cursive; */
   font-family: 'Montserrat', sans-serif;
 
@@ -19,7 +19,7 @@ h1, h2{
   font-weight: 300;
 }
 
-h3, h4, h5, h6, button{
+h3, h4, h5, h6, .button{
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -110,6 +110,10 @@ h3, h4, h5, h6, button{
 /*-------------------Table Overrides-------------------*/
 tr:last-child{
   border-bottom: none;
+}
+
+.table-col-sm{
+  max-width: 30px;
 }
 
 /*-------------------Clearfix-------------------*/

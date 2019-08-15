@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>Document</title>
+    <title>Train Scheduler</title>
 </head>
 <body>
     <main class="container">
@@ -57,7 +57,7 @@
         <ul class="collection with-header collection-train">
             <li class="collection-header"><h5>Add a Train</h5></li>
             <li class="collection-item collection-reset">
-                <form id="input-form" class="clearfix">
+                <form id="input-form" class="form clearfix">
                     <div class="input-field">
                         <input id="train_name" type="text" class="validate" required>
                         <label for="train_name">Train Name</label>
@@ -80,9 +80,9 @@
             </li>
         </ul>
         <div id="editTrainModal" class="modal">
+            <h5 class="modal-header">Edit Train</h5>
             <div class="modal-content">
-                <h5>Edit Train</h5>
-                <form id="edit-form" class="clearfix">
+                <form id="edit-form" class="form clearfix">
                     <div class="input-field">
                         <input id="edit_train_name" type="text" class="validate" required>
                         <label for="edit_train_name">Train Name</label>

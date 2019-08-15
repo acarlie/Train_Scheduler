@@ -12,8 +12,6 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
-
-
 var app = {
     edited: '',
     init(){
@@ -38,17 +36,17 @@ var app = {
             initialTrain = vals[3],
             initDate = moment(initialTrain, "HH:mm").subtract(1, "years"),
             init = moment(initDate).format('X');
-            console.log(init);
 
-        database.ref().push({
-            name,
-            dest,
-            init,
-            freq,
-        });
-
-        app.resetInputs(arr);
-        
+        if (name && dest && init && freq){
+            database.ref().push({
+                name,
+                dest,
+                init,
+                freq,
+            });
+    
+            app.resetInputs(arr);
+        }
     },
     editTrain(){
         var x = $(this),
@@ -72,6 +70,7 @@ var app = {
     editTrainSubmit(){
         var key = $(this).attr('data-edit-key');
         var date = $(this).attr('data-edit-date');
+
         var arr = ['#edit_train_name', '#edit_train_dest', '#edit_train_freq', '#edit_train_init'],
             vals = app.setVal(arr),
             name = vals[0],
@@ -94,11 +93,7 @@ var app = {
                 freq,
             });
 
-        } else {
-            console.log('please fill out all inputs');
-        }
-    
-
+        } 
     },
     deleteTrain(){
         var key = $(this).attr('data-key');
@@ -139,19 +134,17 @@ var app = {
         } 
     },
     getValues(init, freq){
-
         var diff = moment().diff(moment(init, 'X'), "minutes"),
             remn = diff % freq,
             away = freq - remn;
             awayFormatted = app.minutesFormatted(away),
             next = moment().add(away, "minutes").format('hh:mm a');
 
-            console.log(moment(init, 'X').format('MM/DD/YY'));
         return [next, awayFormatted];
     },
     tableRow(s, key){
         var tr = $('<tr>').addClass('train-info').attr('id', key),
-            buttonClose = $('<button>').html('<i class="material-icons">close</i>').attr('data-key', key).addClass('btn-flat train-delete'),
+            buttonClose = $('<button>').html('<i class="material-icons">delete</i>').attr('data-key', key).addClass('btn-flat train-delete'),
             buttonEdit =  $('<button>').html('<i class="material-icons">edit</i>').attr('id', key + 'editButton').attr('data-target', 'editTrainModal').attr('data-key', key).attr('data-name', s.name).attr('data-dest', s.dest).attr('data-freq', s.freq).attr('data-init', s.init).addClass('btn-flat train-edit modal-trigger'),
             freq = this.minutesFormatted(s.freq),
             values = this.getValues(s.init, s.freq);
@@ -208,7 +201,6 @@ $(document).ready(function(){
 
     app.init();
 
-    // $('.modal').modal();
     $('#submit').on('click', app.addTrain);
     $('#editTrainSubmit').on('click', app.editTrainSubmit);
 

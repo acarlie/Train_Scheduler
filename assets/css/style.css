@@ -6,9 +6,7 @@
 }
 
 h1, h2, h3, h4, h5, h6, .button{
-  /* font-family: 'Comfortaa', cursive; */
   font-family: 'Montserrat', sans-serif;
-
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -36,30 +34,33 @@ h3, h4, h5, h6, .button{
 .timepicker-canvas-bg { fill: var(--color-primary) !important; }
 .timepicker-footer button { color: var(--color-primary); }
 
-
-/*-------------------Collection Overrides-------------------*/
-/* .collection-train{
-  box-shadow: 2px 2px 5px rgba(0,0,0,.025);
-} */
-
-.collection-header{
-  position: relative;
-  background: #ccc;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(120deg, #fff, #eee);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(120deg, #fff, #eee); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+/*-------------------Modal Overrides-------------------*/
+.modal-header{
+  margin-top: 0;
+  padding: 1em;
 }
 
-.collection-header::after{
+/*-------------------Collection Overrides-------------------*/
+
+.collection-header, .modal-header{
+  position: relative;
+  background: #ccc;  
+  background: -webkit-linear-gradient(120deg, #fff, #eee); 
+  background: linear-gradient(120deg, #fff, #eee);
+}
+
+.collection-header::after, .modal-header::after{
   position: absolute;
   left: 0;
   bottom: 0;
   content:' ';
   width: 100%;
   height: .25em;
-  background: var(--color-primary);  /* fallback for old browsers */
-  background: -webkit-linear-gradient(120deg, var(--color-primary), #eee);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(120deg, var(--color-primary), #eee); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: var(--color-primary);  
+  background: -webkit-linear-gradient(120deg, var(--color-primary), #eee); 
+  background: linear-gradient(120deg, var(--color-primary), #eee); 
 }
+
 .collection-item.collection-reset{
   padding: 2em;
   margin: 0;
@@ -67,44 +68,53 @@ h3, h4, h5, h6, .button{
 
 /*-------------------Input Overrides-------------------*/
 /* label color */
-#input-form .input-field label { color: #000; }
+.form .input-field label { color: #000; }
 
 /* label focus color */
-#input-form .input-field input[type=text]:focus+label,
-#input-form .input-field input[type=number]:focus+label { 
+.form .input-field input[type=text]:focus+label,
+.form .input-field input[type=number]:focus+label { 
   color: var(--color-primary); 
 }
 
 /* label underline focus color */
-#input-form .input-field input[type=text]:focus, 
-#input-form .input-field input[type=number]:focus  {
+.form .input-field input[type=text]:focus, 
+.form .input-field input[type=number]:focus  {
   border-bottom: 1px solid var(--color-primary);
   box-shadow: 0 1px 0 0 var(--color-primary);
 }
 
 /* valid color */
-#input-form .input-field input[type=text].valid
-#input-form .input-field input[type=number].valid {
+.form .input-field input[type=text].valid
+.form .input-field input[type=number].valid {
   border-bottom: 1px solid var(--color-success);
   box-shadow: 0 1px 0 0 var(--color-success);
 }
 
 /* invalid color */
-#input-form .input-field input[type=text].invalid,
-#input-form .input-field input[type=number].invalid {
+.form .input-field input[type=text].invalid,
+.form .input-field input[type=number].invalid {
   border-bottom: 1px solid var(--color-danger);
   box-shadow: 0 1px 0 0 var(--color-danger);
 }
 
 /* icon prefix focus color */
-#input-form .input-field .prefix.active { color: var(--color-primary); }
+.form .input-field .prefix.active { color: var(--color-primary); }
 
 /*-------------------Button Overrides-------------------*/
 
-#input-form .button{
+.form .button{
   background: var(--color-primary);
   box-shadow: none;
   border-radius: 0;
+}
+
+.train-delete, .train-edit{
+  color: rgba(0,0,0,.4);
+  transition: color .5s linear;
+}
+
+.train-delete:hover, .train-edit:hover{
+  color: rgba(0,0,0,1);
 }
 
 /*-------------------Table Overrides-------------------*/

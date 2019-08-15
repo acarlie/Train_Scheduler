@@ -12,7 +12,10 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
+
+
 var app = {
+    edited: '',
     init(){
         $('.timepicker').timepicker({
             twelveHour: false,
@@ -44,7 +47,7 @@ var app = {
             freq,
         });
 
-        app.resetVal(arr);
+        app.resetInputs(arr);
         
     },
     editTrain(){
@@ -53,18 +56,17 @@ var app = {
             name = x.attr('data-name'),
             dest = x.attr('data-dest'),
             freq = x.attr('data-freq'),
-            init = x.attr('data-init'),
-            initMT = moment(init, 'X').format('HH:mm'),
-            initDate = moment(init, 'X').format('MM/DD/YYYY');
+            initVal = x.attr('data-init'),
+            init = moment(initVal, 'X').format('HH:mm'),
+            initDate = moment(initVal, 'X').format('MM/DD/YYYY'),
+            arr = [['name', name], ['dest', dest], ['freq', freq], ['init', init]];
 
-        console.log(key, name, dest, freq, init);
-
+        var i;
+        for (i of arr){
+            $('#edit_train_' + i[0]).val(i[1]).siblings().addClass('active');
+        }
+        
         $('#editTrainSubmit').attr('data-edit-key', key).attr('data-edit-date', initDate);
-
-        $('#edit_train_name').val(name).siblings().addClass('active');
-        $('#edit_train_dest').val(dest).siblings().addClass('active');
-        $('#edit_train_freq').val(freq).siblings().addClass('active');
-        $('#edit_train_init').val(initMT).siblings().addClass('active');
 
     },
     editTrainSubmit(){
@@ -80,13 +82,23 @@ var app = {
             initDate = moment(initTrainString, 'MM/DD/YYYY HH:mm'),
             init = moment(initDate).format('X');
 
-            console.log('Hello');
-        database.ref().child(key).set({
-            name,
-            dest,
-            init,
-            freq,
-        });
+        if (name && dest && freq && initialTrain){
+            app.instance.close();
+
+            app.edited = key;
+
+            database.ref().child(key).set({
+                name,
+                dest,
+                init,
+                freq,
+            });
+
+        } else {
+            console.log('please fill out all inputs');
+        }
+    
+
     },
     deleteTrain(){
         var key = $(this).attr('data-key');
@@ -101,30 +113,37 @@ var app = {
         }
         return result;
     },
-    resetVal(arr){
+    resetInputs(arr){
         var x;
         for (x of arr){
             $(x).val('');
         }
     },
-    minutesToHours(mins){
-        var h = mins / 60 | 0,
+    minutesFormatted(mins){
+        var d = mins / 1440 | 0,
+            h = (mins % 1440) / 60 | 0,
             m = mins % 60 | 0;
 
-        if (h === 0){
-            return m + 'm';
-        } else if (m === 0 && h > 0){
+        if (d !== 0 && h !== 0 && m !== 0){
+            return d + 'd ' + h + 'h ' + m + 'm';
+        } else if (d !== 0 && h !== 0) {
+            return d + 'd ' + h + 'h';
+        } else if (h !== 0 && m !== 0){
+            return  h + 'h ' + m + 'm';
+        } else if (d !== 0){
+            return d + 'd';
+        } else if (h !== 0){
             return h + 'h';
         } else {
-            return h + 'h ' + m + 'm';
-        }
+            return m + 'm';
+        } 
     },
     getValues(init, freq){
 
         var diff = moment().diff(moment(init, 'X'), "minutes"),
             remn = diff % freq,
             away = freq - remn;
-            awayFormatted = app.minutesToHours(away),
+            awayFormatted = app.minutesFormatted(away),
             next = moment().add(away, "minutes").format('hh:mm a');
 
             console.log(moment(init, 'X').format('MM/DD/YY'));
@@ -133,8 +152,8 @@ var app = {
     tableRow(s, key){
         var tr = $('<tr>').addClass('train-info').attr('id', key),
             buttonClose = $('<button>').html('<i class="material-icons">close</i>').attr('data-key', key).addClass('btn-flat train-delete'),
-            buttonEdit =  $('<button>').html('<i class="material-icons">edit</i>').attr('data-target', 'editTrainModal').attr('data-key', key).attr('data-name', s.name).attr('data-dest', s.dest).attr('data-freq', s.freq).attr('data-init', s.init).addClass('btn-flat train-edit modal-trigger'),
-            freq = this.minutesToHours(s.freq),
+            buttonEdit =  $('<button>').html('<i class="material-icons">edit</i>').attr('id', key + 'editButton').attr('data-target', 'editTrainModal').attr('data-key', key).attr('data-name', s.name).attr('data-dest', s.dest).attr('data-freq', s.freq).attr('data-init', s.init).addClass('btn-flat train-edit modal-trigger'),
+            freq = this.minutesFormatted(s.freq),
             values = this.getValues(s.init, s.freq);
             info = [
                 {info: s.name, id: key + 'name', class: ''}, 
@@ -153,6 +172,22 @@ var app = {
 
         tr.attr('data-init', s.init).attr('data-freq', s.freq).prependTo('#trains');
     },
+    tableRowUpdate(snap){
+        var obj = snap[app.edited],
+            key = app.edited,
+            freq = app.minutesFormatted(obj.freq),
+            values = app.getValues(obj.init, obj.freq),
+            info = [['name', obj.name], ['dest', obj.dest], ['freq', freq], ['next', values[0]], ['away', values[1]]];
+
+        var x;
+        for (x of info){
+            $('#' + key + x[0]).text(x[1]);
+        }
+
+        $('#' + key + 'editButton').attr('data-name', obj.name).attr('data-dest', obj.dest).attr('data-freq', obj.freq).attr('data-init', obj.init);
+
+        app.edited = '';
+    },
     timeUpdate(){
         $('.train-info').each(function(x, obj){
             var x = $(this),
@@ -168,15 +203,16 @@ var app = {
 }
 
 $(document).ready(function(){
+    var elem = document.getElementById('editTrainModal');
+    app.instance = M.Modal.init(elem);
 
     app.init();
 
-    $('.modal').modal();
+    // $('.modal').modal();
     $('#submit').on('click', app.addTrain);
-
-    $(document).on('click', '.train-edit', app.editTrain);
     $('#editTrainSubmit').on('click', app.editTrainSubmit);
 
+    $(document).on('click', '.train-edit', app.editTrain);
     $(document).on('click', '.train-delete', app.deleteTrain);
 
     database.ref().on("child_added", function(snapshot) {
@@ -187,17 +223,10 @@ $(document).ready(function(){
     });
 
     database.ref().on("value", function(snapshot) {
-        var children = snapshot.numChildren();
         var snap = snapshot.val();
-        var keys = Object.getOwnPropertyNames(snap);
-
-        
-
-        console.log(snap);
-        console.log(children);
-        console.log(keys);
-        
-        
+        if (app.edited !== ''){
+            app.tableRowUpdate(snap);
+        }  
     });
       
 

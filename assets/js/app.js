@@ -138,7 +138,7 @@ var app = {
             remn = diff % freq,
             away = freq - remn;
             awayFormatted = app.minutesFormatted(away),
-            next = moment().add(away, "minutes").format('hh:mm a');
+            next = moment().add(away, "minutes").calendar();
 
         return [next, awayFormatted];
     },

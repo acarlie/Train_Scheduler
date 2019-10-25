@@ -1,0 +1,23 @@
+{
+  "name": "Train_Scheduler",
+  "version": "1.0.0",
+  "description": "Train scheduling app created using jQuery, Firebase, and Materialize.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acarlie/Train_Scheduler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acarlie/Train_Scheduler/issues"
+  },
+  "homepage": "https://github.com/acarlie/Train_Scheduler#readme",
+  "devDependencies": {
+    "eslint": "^6.5.1"
+  }
+}
